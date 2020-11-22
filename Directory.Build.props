@@ -1,0 +1,22 @@
+﻿<Project>
+	<ItemGroup>
+		<PackageReference Include="Nerdbank.GitVersioning">
+			<Version>3.3.37</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+      <PackageReference Include="SonarAnalyzer.CSharp" Version="8.3.0.14607" Condition="'$(Configuration)'=='Sonar'">
+         <PrivateAssets>all</PrivateAssets>
+         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+	</ItemGroup>
+	<PropertyGroup>
+		<Product>Weird-Flex Personal Health Companion</Product>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+	</PropertyGroup>
+	<PropertyGroup>
+		<LangVersion>9.0</LangVersion>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+</Project>
