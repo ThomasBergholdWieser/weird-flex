@@ -16,4 +16,8 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WeirdFlex.Data\WeirdFlex.Data.csproj" />
+  </ItemGroup>
+
 </Project>

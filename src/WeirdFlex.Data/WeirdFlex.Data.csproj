@@ -8,4 +8,12 @@
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.12.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Unbound\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WeirdFlex.Common\WeirdFlex.Common.csproj" />
+  </ItemGroup>
+
 </Project>
