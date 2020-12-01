@@ -34,7 +34,7 @@ namespace WeirdFlex.Api.Controllers
         [HttpPost]
         public async Task Post(CreateExerciseModel model)
         {
-            var result = await this.mediator.Send(new AddExercise.Request(model.ExerciseType, model.Name, model.ImageRef));
+            var result = await this.mediator.Send(new CreateExercise.Request(model.ExerciseType, model.Name, model.ImageRef));
         }
     }
 }
