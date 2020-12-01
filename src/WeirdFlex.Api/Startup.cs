@@ -41,7 +41,7 @@ namespace WeirdFlex.Api
 
             // register infrastructure
             services.AddMediatR(typeof(WeirdFlexBusinessAssemblyMarker));
-            services.AddAutoMapper(typeof(Startup), typeof(WeirdFlexBusinessAssemblyMarker));
+            services.AddAutoMapper(typeof(WeirdFlexBusinessAssemblyMarker));
 
             // register entity framework
             services.AddDbContext<FlexContext>(options => options
