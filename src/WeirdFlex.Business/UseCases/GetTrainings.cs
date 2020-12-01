@@ -12,25 +12,29 @@ using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class GetExercises : IRequestHandler<GetExercises.Request, Result<IList<Exercise>>>
+    public class GetTrainings : IRequestHandler<GetTrainings.Request, Result<IList<TrainingPlan>>>
     {
-        public class Request : IRequest<Result<IList<Exercise>>>
+        public class Request : IRequest<Result<IList<TrainingPlan>>>
         {
-            public Request()
+            public long UserId { get; }
+
+            public Request(long userId)
             {
+                UserId = userId;
             }
         }
 
         readonly FlexContext dbContext;
 
-        public GetExercises(FlexContext dbContext)
+        public GetTrainings(FlexContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        public async Task<Result<IList<Exercise>>> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<Result<IList<TrainingPlan>>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var exercises = await this.dbContext.Exercises
+            var exercises = await this.dbContext.TrainingPlans
+                .Where(x )
                 .ToListAsync(cancellationToken);
 
             return exercises;
