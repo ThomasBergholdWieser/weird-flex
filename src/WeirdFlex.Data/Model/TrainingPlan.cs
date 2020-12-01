@@ -16,10 +16,16 @@ namespace WeirdFlex.Data.Model
 
         public DateTime? LastExecution { get; set; }
 
-        public TrainingPlan(string name)
+        public int Order { get; set; }
+
+        public TrainingPlan(long userId, string name)
         {
+            this.UserId = userId;
             this.Name = name;
         }
+
+        public long UserId { get; set; }
+        public virtual User User { get; set; } = null!;
 
         public virtual ICollection<TrainingPlanInstance> Executions { get; set; } = new List<TrainingPlanInstance>();
 

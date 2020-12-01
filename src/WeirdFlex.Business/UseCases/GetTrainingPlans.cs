@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class GetTrainings : IRequestHandler<GetTrainings.Request, Result<IList<TrainingPlan>>>
+    public class GetTrainingPlans : IRequestHandler<GetTrainingPlans.Request, Result<IList<TrainingPlan>>>
     {
         public class Request : IRequest<Result<IList<TrainingPlan>>>
         {
@@ -26,18 +27,18 @@ namespace Tieto.Lama.Business.UseCases
 
         readonly FlexContext dbContext;
 
-        public GetTrainings(FlexContext dbContext)
+        public GetTrainingPlans(FlexContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
         public async Task<Result<IList<TrainingPlan>>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var exercises = await this.dbContext.TrainingPlans
-                .Where(x )
+            var list = await this.dbContext.TrainingPlans
+                .Where(x => x.UserId == request.UserId)
                 .ToListAsync(cancellationToken);
 
-            return exercises;
+            return list;
         }
     }
 }

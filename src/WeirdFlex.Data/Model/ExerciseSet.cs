@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,5 +20,8 @@ namespace WeirdFlex.Data.Model
         public TimeSpan? Duration { get; set; }
 
         public double? Distance { get; set; }
+
+        public long ExerciseInstanceId { get; set; }
+        public virtual ExerciseInstance ExerciseInstance { get; set; } = null!;
     }
 }

@@ -30,10 +30,10 @@ namespace Tieto.Lama.Business.UseCases
 
         public async Task<Result<IList<Exercise>>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var exercises = await this.dbContext.Exercises
+            var list = await this.dbContext.Exercises
                 .ToListAsync(cancellationToken);
 
-            return exercises;
+            return list;
         }
     }
 }
