@@ -19,5 +19,7 @@ namespace WeirdFlex.Data.Model
 
         public long TrainingPlanInstanceId { get; set; }
         public virtual TrainingPlanInstance TrainingPlanInstance { get; set; } = null!;
+
+        public virtual ICollection<ExerciseSet> Sets { get; set; } = new List<ExerciseSet>();
     }
 }
