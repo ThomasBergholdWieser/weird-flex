@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Tieto.Lama.Business.UseCases;
+using WeirdFlex.Business.Views.ViewModels;
 
 namespace WeirdFlex.Api.Controllers
 {
@@ -28,6 +29,12 @@ namespace WeirdFlex.Api.Controllers
             var result = await this.mediator.Send(new GetExercises.Request());
 
             return new string[0];
+        }
+
+        [HttpPost]
+        public async Task Post(CreateExerciseModel model)
+        {
+            var result = await this.mediator.Send(new AddExercise.Request(model.ExerciseType, model.Name, model.ImageRef));
         }
     }
 }

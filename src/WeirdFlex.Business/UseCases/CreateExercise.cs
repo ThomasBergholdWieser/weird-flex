@@ -8,24 +8,25 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using WeirdFlex.Common.Enums;
 using WeirdFlex.Data.EF;
 using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class AddTrainingPlan : IRequestHandler<AddTrainingPlan.Request, Result<TrainingPlan>>
+    public class CreateExercise : IRequestHandler<CreateExercise.Request, Result<Exercise>>
     {
-        public class Request : IRequest<Result<TrainingPlan>>
+        public class Request : IRequest<Result<Exercise>>
         {
-            public long UserId { get; }
+            public ExerciseType ExerciseType { get; }
 
             public string Name { get; }
 
             public string? ImageRef { get; }
 
-            public Request(long userId, string name, string? imageRef)
+            public Request(ExerciseType exerciseType, string name, string? imageRef)
             {
-                this.UserId = userId;
+                this.ExerciseType = exerciseType;
                 this.Name = name;
                 this.ImageRef = imageRef;
             }
@@ -33,26 +34,19 @@ namespace Tieto.Lama.Business.UseCases
 
         readonly FlexContext dbContext;
 
-        public AddTrainingPlan(FlexContext dbContext)
+        public CreateExercise(FlexContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        public async Task<Result<TrainingPlan>> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<Result<Exercise>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var maxOrder = (await this.dbContext.TrainingPlans
-                .Where(x => x.UserId == request.UserId)
-                .MaxAsync(x => (int?)x.Order)) ?? 0;
-
-            maxOrder += 100;
-
-            var newEntity = new TrainingPlan(request.UserId, request.Name)
+            var newEntity = new Exercise(request.ExerciseType, request.Name)
             {
                 ImageRef = request.ImageRef,
-                Order = maxOrder,
             };
 
-            this.dbContext.TrainingPlans
+            this.dbContext.Exercises
                 .Add(newEntity);
 
             await this.dbContext.SaveChangesAsync(cancellationToken);
