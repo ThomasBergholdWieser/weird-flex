@@ -10,6 +10,12 @@ namespace WeirdFlex.Data.Model
     {
         public long Id { get; set; }
 
+        public ExerciseInstance(long exerciseId, long trainingPlanInstanceId)
+        {
+            this.ExerciseId = exerciseId;
+            this.TrainingPlanInstanceId = trainingPlanInstanceId;
+        }
+
         public int Order { get; set; }
 
         public bool IsReadOnly { get; set; }

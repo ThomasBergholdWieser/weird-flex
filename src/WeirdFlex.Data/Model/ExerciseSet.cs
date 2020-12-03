@@ -11,6 +11,11 @@ namespace WeirdFlex.Data.Model
     {
         public long Id { get; set; }
 
+        public ExerciseSet(long exerciseInstanceId)
+        {
+            this.ExerciseInstanceId = exerciseInstanceId;
+        }
+
         public int Order { get; set; }
 
         public int? Repetitions { get; set; }

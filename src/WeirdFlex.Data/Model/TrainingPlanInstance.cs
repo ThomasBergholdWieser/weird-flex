@@ -10,6 +10,11 @@ namespace WeirdFlex.Data.Model
     {
         public long Id { get; set; }
 
+        public TrainingPlanInstance(long trainingPlanId)
+        {
+            this.TrainingPlanId = trainingPlanId;
+        }
+
         public DateTime StartedAt { get; set; }
 
         public long TrainingPlanId { get; set; }
