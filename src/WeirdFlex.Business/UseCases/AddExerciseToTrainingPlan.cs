@@ -41,6 +41,13 @@ namespace Tieto.Lama.Business.UseCases
                 return Result.Failure<TrainingPlanExercise>("Not allowed");
             }
 
+            if (await this.dbContext.TrainingPlanExercises
+                .Where(x => x.Id == request.TrainingPlanId && x.ExerciseId == request.ExerciseId)
+                .AnyAsync(cancellationToken))
+            {
+                return Result.Failure<TrainingPlanExercise>("Already added");
+            }
+
             var maxOrder = (await this.dbContext.TrainingPlanExercises
                 .Where(x => x.TrainingPlanId == request.TrainingPlanId)
                 .MaxAsync(x => (int?)x.Order)) ?? 0;

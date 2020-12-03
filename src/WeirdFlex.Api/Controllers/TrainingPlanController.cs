@@ -45,6 +45,12 @@ namespace WeirdFlex.Api.Controllers
             await this.requestDispatcher.Dispatch(new DeleteExercise.Request(trainingPlanId), cancellationToken);
         }
 
+        [HttpGet("{trainingPlanId}/exercises")]
+        public async Task<IEnumerable<ExerciseModel>> GetTrainingPlanExercises(long trainingPlanId, CancellationToken cancellationToken)
+        {
+            return await this.requestDispatcher.Dispatch<Exercise, ExerciseModel>(new GetTrainingPlanExercises.Request(1, trainingPlanId), cancellationToken);
+        }
+
         [HttpPost("{trainingPlanId}/exercises")]
         public async Task AddExerciseToTrainingPlan(long trainingPlanId, [FromBody] ExerciseRef model, CancellationToken cancellationToken)
         {
