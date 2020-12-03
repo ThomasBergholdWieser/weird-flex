@@ -9,9 +9,9 @@ using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class AddExerciseToTrainingPlan : IRequestHandler<AddExerciseToTrainingPlan.Request, IResult>
+    public class RemoveExerciseFromTrainingPlan : IRequestHandler<RemoveExerciseFromTrainingPlan.Request, IResult>
     {
-        public class Request : IRequest<IResult>
+        public class Request : IRequest<IResult<TrainingPlanExercise>>
         {
             public long UserId { get; set; }
             public long TrainingPlanId { get; }
@@ -27,7 +27,7 @@ namespace Tieto.Lama.Business.UseCases
 
         readonly FlexContext dbContext;
 
-        public AddExerciseToTrainingPlan(FlexContext dbContext)
+        public RemoveExerciseFromTrainingPlan(FlexContext dbContext)
         {
             this.dbContext = dbContext;
         }
@@ -41,28 +41,12 @@ namespace Tieto.Lama.Business.UseCases
                 return Result.Failure<TrainingPlanExercise>("Not allowed");
             }
 
-            if (await this.dbContext.TrainingPlanExercises
-                .Where(x => x.Id == request.TrainingPlanId && x.ExerciseId == request.ExerciseId)
-                .AnyAsync(cancellationToken))
-            {
-                return Result.Failure<TrainingPlanExercise>("Already added");
-            }
-
-            var maxOrder = (await this.dbContext.TrainingPlanExercises
-                .Where(x => x.TrainingPlanId == request.TrainingPlanId)
-                .MaxAsync(x => (int?)x.Order)) ?? 0;
-
-            maxOrder += 100;
-
-            var newEntity = new TrainingPlanExercise()
-            {
-                TrainingPlanId = request.TrainingPlanId,
-                ExerciseId = request.ExerciseId,
-                Order = maxOrder,
-            };
+            var entities = await this.dbContext.TrainingPlanExercises
+                .Where(x => x.TrainingPlanId == request.TrainingPlanId && x.ExerciseId == request.ExerciseId)
+                .ToListAsync();
 
             this.dbContext.TrainingPlanExercises
-                .Add(newEntity);
+                .RemoveRange(entities);
 
             await this.dbContext.SaveChangesAsync(cancellationToken);
 

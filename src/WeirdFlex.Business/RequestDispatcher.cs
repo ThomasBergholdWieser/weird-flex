@@ -22,7 +22,7 @@ namespace WeirdFlex.Business
             this.mapper = mapper;
         }
 
-        public async Task<TViewModel> Dispatch<TResponse, TViewModel>(IRequest<Result<TResponse>> request, CancellationToken cancellationToken = default)
+        public async Task<TViewModel> Dispatch<TResponse, TViewModel>(IRequest<IResult<TResponse>> request, CancellationToken cancellationToken = default)
         {
             var result = await this.mediator.Send(request, cancellationToken);
 
@@ -31,13 +31,18 @@ namespace WeirdFlex.Business
             return value;
         }
 
-        public async Task<IEnumerable<TViewModel>> Dispatch<TResponse, TViewModel>(IRequest<Result<IList<TResponse>>> request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<TViewModel>> Dispatch<TResponse, TViewModel>(IRequest<IResult<IList<TResponse>>> request, CancellationToken cancellationToken)
         {
             var result = await this.mediator.Send(request, cancellationToken);
 
             var value = this.mapper.Map<IEnumerable<TViewModel>>(result.Value);
 
             return value;
+        }
+
+        public async Task Dispatch(IRequest<IResult> request, CancellationToken cancellationToken)
+        {
+            var result = await this.mediator.Send(request, cancellationToken);
         }
     }
 }

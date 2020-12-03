@@ -8,9 +8,9 @@ using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class CreateUser : IRequestHandler<CreateUser.Request, Result<User>>
+    public class CreateUser : IRequestHandler<CreateUser.Request, IResult<User>>
     {
-        public class Request : IRequest<Result<User>>
+        public class Request : IRequest<IResult<User>>
         {
             public string Name { get; }
 
@@ -27,7 +27,7 @@ namespace Tieto.Lama.Business.UseCases
             this.dbContext = dbContext;
         }
 
-        public async Task<Result<User>> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<IResult<User>> Handle(Request request, CancellationToken cancellationToken)
         {
             var newEntity = new User(request.Name);
 
@@ -36,7 +36,7 @@ namespace Tieto.Lama.Business.UseCases
 
             await this.dbContext.SaveChangesAsync(cancellationToken);
 
-            return newEntity;
+            return Result.Success(newEntity);
         }
     }
 }
