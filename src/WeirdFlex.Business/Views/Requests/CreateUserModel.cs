@@ -4,11 +4,11 @@ namespace WeirdFlex.Business.Views.ViewModels
 {
     public class CreateUserModel
     {
-        public string Name { get; set; }
+        public string DisplayName { get; set; }
 
-        public CreateUserModel(string name)
+        public CreateUserModel(string displayName)
         {
-            this.Name = name;
+            this.DisplayName = displayName;
         }
     }
 }
