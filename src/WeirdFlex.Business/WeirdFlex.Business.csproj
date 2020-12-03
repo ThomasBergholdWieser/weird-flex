@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Mapper\**" />
+    <EmbeddedResource Remove="Mapper\**" />
+    <None Remove="Mapper\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.12.2" />
     <PackageReference Include="MediatR" Version="9.0.0" />
@@ -15,10 +21,6 @@
     <ProjectReference Include="..\WeirdFlex.Common\WeirdFlex.Common.csproj" />
     <ProjectReference Include="..\WeirdFlex.Data.EF\WeirdFlex.Data.EF.csproj" />
     <ProjectReference Include="..\WeirdFlex.Data\WeirdFlex.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Mapper\" />
   </ItemGroup>
 
 </Project>

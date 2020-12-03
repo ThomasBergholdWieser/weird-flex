@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using WeirdFlex.Api.Filter;
 using WeirdFlex.Business;
+using WeirdFlex.Business.Interfaces;
 using WeirdFlex.Data.EF;
 
 namespace WeirdFlex.Api
@@ -38,6 +39,9 @@ namespace WeirdFlex.Api
             // register infrastructure
             services.AddMediatR(typeof(WeirdFlexBusinessAssemblyMarker));
             services.AddAutoMapper(typeof(WeirdFlexBusinessAssemblyMarker));
+
+            // register business services
+            services.AddScoped<IRequestDispatcher, RequestDispatcher>();
 
             // register entity framework
             services.AddDbContext<FlexContext>(options => options

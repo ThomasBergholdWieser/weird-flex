@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -6,8 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Logging;
 using Tieto.Lama.Business.UseCases;
+using WeirdFlex.Business.Interfaces;
 using WeirdFlex.Business.Views.Responses;
 using WeirdFlex.Business.Views.ViewModels;
+using WeirdFlex.Data.Model;
 
 namespace WeirdFlex.Api.Controllers
 {
@@ -16,34 +19,24 @@ namespace WeirdFlex.Api.Controllers
     public class TrainingPlanController : ControllerBase
     {
         private readonly ILogger logger;
-        private readonly IMediator mediator;
-        private readonly IMapper mapper;
+        private readonly IRequestDispatcher requestDispatcher;
 
-        public TrainingPlanController(ILogger<TrainingPlanController> logger, IMediator mediator, IMapper mapper)
+        public TrainingPlanController(ILogger<TrainingPlanController> logger, IRequestDispatcher requestDispatcher)
         {
             this.logger = logger;
-            this.mediator = mediator;
-            this.mapper = mapper;
+            this.requestDispatcher = requestDispatcher;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<TrainingPlanModel>> Get(long userId)
+        public async Task<IEnumerable<TrainingPlanModel>> Get(long userId, CancellationToken cancellationToken)
         {
-            var result = await this.mediator.Send(new GetTrainingPlans.Request(userId));
-
-            var mapped = this.mapper.Map<IEnumerable<TrainingPlanModel>>(result.Value);
-
-            return mapped;
+            return await this.requestDispatcher.Dispatch<TrainingPlan, TrainingPlanModel>(new GetTrainingPlans.Request(userId), cancellationToken);
         }
 
         [HttpPost]
-        public async Task<TrainingPlanModel> Post(CreateTrainingPlanModel model)
+        public async Task<TrainingPlanModel> Post(CreateTrainingPlanModel model, CancellationToken cancellationToken)
         {
-            var result = await this.mediator.Send(new CreateTrainingPlan.Request(model.UserId, model.Name, model.ImageRef));
-
-            var mapped = this.mapper.Map<TrainingPlanModel>(result.Value);
-
-            return mapped;
+            return await this.requestDispatcher.Dispatch<TrainingPlan, TrainingPlanModel>(new CreateTrainingPlan.Request(model.UserId, model.Name, model.ImageRef), cancellationToken);
         }
     }
 }

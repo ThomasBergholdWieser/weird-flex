@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Tieto.Lama.Business.UseCases;
+using WeirdFlex.Business;
 using WeirdFlex.Business.Views.Responses;
 using WeirdFlex.Business.Views.ViewModels;
+using WeirdFlex.Data.Model;
 
 namespace WeirdFlex.Api.Controllers
 {
@@ -15,24 +19,18 @@ namespace WeirdFlex.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger logger;
-        private readonly IMediator mediator;
-        private readonly IMapper mapper;
+        private readonly RequestDispatcher requestDispatcher;
 
-        public UserController(ILogger<UserController> logger, IMediator mediator, IMapper mapper)
+        public UserController(ILogger<UserController> logger, RequestDispatcher requestDispatcher)
         {
             this.logger = logger;
-            this.mediator = mediator;
-            this.mapper = mapper;
+            this.requestDispatcher = requestDispatcher;
         }
 
         [HttpPost]
-        public async Task<UserModel> Post(CreateUserModel model)
+        public async Task<UserModel> Post(CreateUserModel model, CancellationToken cancellationToken)
         {
-            var result = await this.mediator.Send(new CreateUser.Request(model.Name));
-
-            var mapped = this.mapper.Map<UserModel>(result.Value);
-
-            return mapped;
+            return await this.requestDispatcher.Dispatch<User, UserModel>(new CreateUser.Request(model.DisplayName), cancellationToken);
         }
     }
 }
