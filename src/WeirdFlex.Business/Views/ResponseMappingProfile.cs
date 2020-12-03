@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WeirdFlex.Business.Views.Responses;
+using WeirdFlex.Data.Model;
 
 namespace WeirdFlex.Business.Views
 {
-    class ResponseMappingProfile : Profile
+    public class ResponseMappingProfile : Profile
     {
         public ResponseMappingProfile()
         {
-
+            this.CreateMap<Exercise, ExerciseModel>();
+            this.CreateMap<TrainingPlan, TrainingPlanModel>();
+            this.CreateMap<User, UserModel>();
         }
     }
 }

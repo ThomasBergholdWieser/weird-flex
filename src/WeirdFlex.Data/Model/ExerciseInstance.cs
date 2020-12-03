@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace WeirdFlex.Data.Model
 {
     public class ExerciseInstance
     {
         public long Id { get; set; }
+
+        public ExerciseInstance(long exerciseId, long trainingPlanInstanceId)
+        {
+            this.ExerciseId = exerciseId;
+            this.TrainingPlanInstanceId = trainingPlanInstanceId;
+        }
 
         public int Order { get; set; }
 
