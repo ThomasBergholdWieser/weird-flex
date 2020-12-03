@@ -1,0 +1,7 @@
+<Project InitialTargets="RemoveDcProj">
+  <Target Name="RemoveDcProj">
+    <ItemGroup>
+      <ProjectReference Remove="$(MSBuildThisFileDirectory)docker-compose.dcproj" Condition="'$(MSBuildRuntimeType)' == 'Core'"/>
+    </ItemGroup>
+  </Target>
+</Project>
