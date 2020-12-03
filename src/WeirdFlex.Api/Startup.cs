@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -30,7 +31,8 @@ namespace WeirdFlex.Api
         {
             services.AddMemoryCache();
             services.AddRouting();
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())); 
             services.AddRazorPages();
 
             // register infrastructure

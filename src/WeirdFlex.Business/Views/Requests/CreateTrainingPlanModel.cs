@@ -2,17 +2,15 @@
 
 namespace WeirdFlex.Business.Views.ViewModels
 {
-    public class CreateExerciseModel
+    public class CreateTrainingPlanModel
     {
-        public ExerciseType ExerciseType { get; set; }
-
+        public long UserId { get; set; }
         public string Name { get; set; }
-
         public string? ImageRef { get; set; }
 
-        public CreateExerciseModel(ExerciseType exerciseType, string name, string imageRef)
+        public CreateTrainingPlanModel(long userId, string name, string? imageRef)
         {
-            this.ExerciseType = exerciseType;
+            this.UserId = userId;
             this.Name = name;
             this.ImageRef = imageRef;
         }
