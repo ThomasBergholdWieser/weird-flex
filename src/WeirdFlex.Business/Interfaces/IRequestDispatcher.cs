@@ -8,7 +8,10 @@ namespace WeirdFlex.Business.Interfaces
 {
     public interface IRequestDispatcher
     {
-        Task<TViewModel> Dispatch<TResponse, TViewModel>(IRequest<Result<TResponse>> request, CancellationToken cancellationToken);
-        Task<IEnumerable<TViewModel>> Dispatch<TResponse, TViewModel>(IRequest<Result<IList<TResponse>>> request, CancellationToken cancellationToken);
+        Task Dispatch(IRequest<IResult> request, CancellationToken cancellationToken);
+
+        Task<TViewModel> Dispatch<TResponse, TViewModel>(IRequest<IResult<TResponse>> request, CancellationToken cancellationToken);
+
+        Task<IEnumerable<TViewModel>> Dispatch<TResponse, TViewModel>(IRequest<IResult<IList<TResponse>>> request, CancellationToken cancellationToken);
     }
 }

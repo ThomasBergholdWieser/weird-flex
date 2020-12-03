@@ -15,7 +15,7 @@ using WeirdFlex.Data.Model;
 namespace WeirdFlex.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/trainingPlans")]
     public class TrainingPlanController : ControllerBase
     {
         private readonly ILogger logger;
@@ -37,6 +37,24 @@ namespace WeirdFlex.Api.Controllers
         public async Task<TrainingPlanModel> Post(CreateTrainingPlanModel model, CancellationToken cancellationToken)
         {
             return await this.requestDispatcher.Dispatch<TrainingPlan, TrainingPlanModel>(new CreateTrainingPlan.Request(model.UserId, model.Name, model.ImageRef), cancellationToken);
+        }
+
+        [HttpDelete]
+        public async Task Delete(long trainingPlanId, CancellationToken cancellationToken)
+        {
+            await this.requestDispatcher.Dispatch(new DeleteExercise.Request(trainingPlanId), cancellationToken);
+        }
+
+        [HttpPost("{trainingPlanId}/exercises")]
+        public async Task AddExerciseToTrainingPlan(long trainingPlanId, [FromBody] ExerciseRef model, CancellationToken cancellationToken)
+        {
+            await this.requestDispatcher.Dispatch(new AddExerciseToTrainingPlan.Request(1, trainingPlanId, model.Id), cancellationToken);
+        }
+
+        [HttpDelete("{trainingPlanId}/exercises")]
+        public async Task RemoveExerciseFromTrainingPlan(long trainingPlanId, [FromBody] ExerciseRef model, CancellationToken cancellationToken)
+        {
+            await this.requestDispatcher.Dispatch(new AddExerciseToTrainingPlan.Request(1, trainingPlanId, model.Id), cancellationToken);
         }
     }
 }

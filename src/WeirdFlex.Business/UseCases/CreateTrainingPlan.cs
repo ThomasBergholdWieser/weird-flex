@@ -9,9 +9,9 @@ using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class CreateTrainingPlan : IRequestHandler<CreateTrainingPlan.Request, Result<TrainingPlan>>
+    public class CreateTrainingPlan : IRequestHandler<CreateTrainingPlan.Request, IResult<TrainingPlan>>
     {
-        public class Request : IRequest<Result<TrainingPlan>>
+        public class Request : IRequest<IResult<TrainingPlan>>
         {
             public long UserId { get; }
 
@@ -34,7 +34,7 @@ namespace Tieto.Lama.Business.UseCases
             this.dbContext = dbContext;
         }
 
-        public async Task<Result<TrainingPlan>> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<IResult<TrainingPlan>> Handle(Request request, CancellationToken cancellationToken)
         {
             var maxOrder = (await this.dbContext.TrainingPlans
                 .Where(x => x.UserId == request.UserId)
@@ -53,7 +53,7 @@ namespace Tieto.Lama.Business.UseCases
 
             await this.dbContext.SaveChangesAsync(cancellationToken);
 
-            return newEntity;
+            return Result.Success(newEntity);
         }
     }
 }

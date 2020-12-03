@@ -8,9 +8,9 @@ using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class CreateExercise : IRequestHandler<CreateExercise.Request, Result<Exercise>>
+    public class CreateExercise : IRequestHandler<CreateExercise.Request, IResult<Exercise>>
     {
-        public class Request : IRequest<Result<Exercise>>
+        public class Request : IRequest<IResult<Exercise>>
         {
             public ExerciseType ExerciseType { get; }
 
@@ -33,7 +33,7 @@ namespace Tieto.Lama.Business.UseCases
             this.dbContext = dbContext;
         }
 
-        public async Task<Result<Exercise>> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<IResult<Exercise>> Handle(Request request, CancellationToken cancellationToken)
         {
             var newEntity = new Exercise(request.ExerciseType, request.Name)
             {
@@ -45,7 +45,7 @@ namespace Tieto.Lama.Business.UseCases
 
             await this.dbContext.SaveChangesAsync(cancellationToken);
 
-            return newEntity;
+            return Result.Success(newEntity);
         }
     }
 }

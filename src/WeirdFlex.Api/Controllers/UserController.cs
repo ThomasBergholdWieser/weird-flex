@@ -15,7 +15,7 @@ using WeirdFlex.Data.Model;
 namespace WeirdFlex.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly ILogger logger;
