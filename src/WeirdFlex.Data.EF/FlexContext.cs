@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using WeirdFlex.Data.Model;
 
 namespace WeirdFlex.Data.EF

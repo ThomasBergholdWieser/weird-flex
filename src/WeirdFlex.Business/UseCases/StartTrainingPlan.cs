@@ -1,16 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using WeirdFlex.Common.Enums;
 using WeirdFlex.Data.EF;
 using WeirdFlex.Data.Model;
 

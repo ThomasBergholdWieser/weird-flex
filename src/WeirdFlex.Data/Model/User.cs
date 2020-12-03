@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WeirdFlex.Data.Model
+﻿namespace WeirdFlex.Data.Model
 {
     public class User
     {
