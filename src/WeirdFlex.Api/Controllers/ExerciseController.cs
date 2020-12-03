@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Tieto.Lama.Business.UseCases;
+using WeirdFlex.Business.Interfaces;
 using WeirdFlex.Business.Views.Responses;
 using WeirdFlex.Business.Views.ViewModels;
+using WeirdFlex.Data.Model;
 
 namespace WeirdFlex.Api.Controllers
 {
@@ -15,34 +18,24 @@ namespace WeirdFlex.Api.Controllers
     public class ExerciseController : ControllerBase
     {
         private readonly ILogger logger;
-        private readonly IMediator mediator;
-        private readonly IMapper mapper;
+        private readonly IRequestDispatcher requestDispatcher;
 
-        public ExerciseController(ILogger<ExerciseController> logger, IMediator mediator, IMapper mapper)
+        public ExerciseController(ILogger<ExerciseController> logger, IRequestDispatcher requestDispatcher)
         {
             this.logger = logger;
-            this.mediator = mediator;
-            this.mapper = mapper;
+            this.requestDispatcher = requestDispatcher;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ExerciseModel>> Get()
+        public async Task<IEnumerable<ExerciseModel>> Get(CancellationToken cancellationToken)
         {
-            var result = await this.mediator.Send(new GetExercises.Request());
-
-            var mapped = this.mapper.Map<IEnumerable<ExerciseModel>>(result.Value);
-
-            return mapped;
+            return await this.requestDispatcher.Dispatch<Exercise, ExerciseModel>(new GetExercises.Request(), cancellationToken);
         }
 
         [HttpPost]
-        public async Task<ExerciseModel> Post(CreateExerciseModel model)
+        public async Task<ExerciseModel> Post(CreateExerciseModel model, CancellationToken cancellationToken)
         {
-            var result = await this.mediator.Send(new CreateExercise.Request(model.ExerciseType, model.Name, model.ImageRef));
-
-            var mapped = this.mapper.Map<ExerciseModel>(result.Value);
-
-            return mapped;
+            return await this.requestDispatcher.Dispatch<Exercise, ExerciseModel>(new CreateExercise.Request(model.ExerciseType, model.Name, model.ImageRef), cancellationToken);
         }
     }
 }
