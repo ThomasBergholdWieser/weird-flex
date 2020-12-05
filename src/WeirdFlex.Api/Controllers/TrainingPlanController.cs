@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ using WeirdFlex.Data.Model;
 namespace WeirdFlex.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/trainingPlans")]
     public class TrainingPlanController : ControllerBase
     {
