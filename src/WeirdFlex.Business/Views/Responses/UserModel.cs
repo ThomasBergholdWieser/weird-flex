@@ -1,6 +1,4 @@
-﻿using WeirdFlex.Common.Enums;
-
-namespace WeirdFlex.Business.Views.Responses
+﻿namespace WeirdFlex.Business.Views.Responses
 {
     public class UserModel
     {

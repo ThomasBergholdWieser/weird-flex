@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Logging;
 using Tieto.Lama.Business.UseCases;
 using WeirdFlex.Business.Interfaces;
@@ -20,49 +18,53 @@ namespace WeirdFlex.Api.Controllers
     [Route("api/trainingPlans")]
     public class TrainingPlanController : ControllerBase
     {
-        private readonly ILogger logger;
         private readonly IRequestDispatcher requestDispatcher;
 
-        public TrainingPlanController(ILogger<TrainingPlanController> logger, IRequestDispatcher requestDispatcher)
+        public TrainingPlanController(IRequestDispatcher requestDispatcher)
         {
-            this.logger = logger;
             this.requestDispatcher = requestDispatcher;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<TrainingPlanModel>> Get(long userId, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TrainingPlanModel>))]
+        public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            return await this.requestDispatcher.Dispatch<TrainingPlan, TrainingPlanModel>(new GetTrainingPlans.Request(userId), cancellationToken);
+            return await this.requestDispatcher.Dispatch<TrainingPlan, TrainingPlanModel>(new GetTrainingPlans.Request(), cancellationToken);
         }
 
         [HttpPost]
-        public async Task<TrainingPlanModel> Post(CreateTrainingPlanModel model, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TrainingPlanModel))]
+        public async Task<IActionResult> Post(CreateTrainingPlanModel model, CancellationToken cancellationToken)
         {
-            return await this.requestDispatcher.Dispatch<TrainingPlan, TrainingPlanModel>(new CreateTrainingPlan.Request(model.UserId, model.Name, model.ImageRef), cancellationToken);
+            return await this.requestDispatcher.Dispatch<TrainingPlan, TrainingPlanModel>(new CreateTrainingPlan.Request(model.Name, model.ImageRef), cancellationToken);
         }
 
         [HttpDelete]
-        public async Task Delete(long trainingPlanId, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        public async Task<IActionResult> Delete(long trainingPlanId, CancellationToken cancellationToken)
         {
-            await this.requestDispatcher.Dispatch(new DeleteExercise.Request(trainingPlanId), cancellationToken);
+            return await this.requestDispatcher.Dispatch(new DeleteExercise.Request(trainingPlanId), cancellationToken);
         }
 
         [HttpGet("{trainingPlanId}/exercises")]
-        public async Task<IEnumerable<ExerciseModel>> GetTrainingPlanExercises(long trainingPlanId, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseModel>))]
+        public async Task<IActionResult> GetTrainingPlanExercises(long trainingPlanId, CancellationToken cancellationToken)
         {
-            return await this.requestDispatcher.Dispatch<Exercise, ExerciseModel>(new GetTrainingPlanExercises.Request(1, trainingPlanId), cancellationToken);
+            return await this.requestDispatcher.Dispatch<Exercise, ExerciseModel>(new GetTrainingPlanExercises.Request(trainingPlanId), cancellationToken);
         }
 
         [HttpPost("{trainingPlanId}/exercises")]
-        public async Task AddExerciseToTrainingPlan(long trainingPlanId, [FromBody] ExerciseRef model, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        public async Task<IActionResult> AddExerciseToTrainingPlan(long trainingPlanId, [FromBody] ExerciseRef model, CancellationToken cancellationToken)
         {
-            await this.requestDispatcher.Dispatch(new AddExerciseToTrainingPlan.Request(1, trainingPlanId, model.Id), cancellationToken);
+            return await this.requestDispatcher.Dispatch(new AddExerciseToTrainingPlan.Request(trainingPlanId, model.Id), cancellationToken);
         }
 
         [HttpDelete("{trainingPlanId}/exercises")]
-        public async Task RemoveExerciseFromTrainingPlan(long trainingPlanId, [FromBody] ExerciseRef model, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        public async Task<IActionResult> RemoveExerciseFromTrainingPlan(long trainingPlanId, [FromBody] ExerciseRef model, CancellationToken cancellationToken)
         {
-            await this.requestDispatcher.Dispatch(new AddExerciseToTrainingPlan.Request(1, trainingPlanId, model.Id), cancellationToken);
+            return await this.requestDispatcher.Dispatch(new AddExerciseToTrainingPlan.Request(trainingPlanId, model.Id), cancellationToken);
         }
     }
 }

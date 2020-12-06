@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Tieto.Lama.Business.UseCases;
@@ -19,31 +18,32 @@ namespace WeirdFlex.Api.Controllers
     [Route("api/exercises")]
     public class ExerciseController : ControllerBase
     {
-        private readonly ILogger logger;
         private readonly IRequestDispatcher requestDispatcher;
 
-        public ExerciseController(ILogger<ExerciseController> logger, IRequestDispatcher requestDispatcher)
+        public ExerciseController(IRequestDispatcher requestDispatcher)
         {
-            this.logger = logger;
             this.requestDispatcher = requestDispatcher;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ExerciseModel>> Get(CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseModel>))]
+        public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
             return await this.requestDispatcher.Dispatch<Exercise, ExerciseModel>(new GetExercises.Request(), cancellationToken);
         }
 
         [HttpPost]
-        public async Task<ExerciseModel> Post(CreateExerciseModel model, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExerciseModel))]
+        public async Task<IActionResult> Post(CreateExerciseModel model, CancellationToken cancellationToken)
         {
             return await this.requestDispatcher.Dispatch<Exercise, ExerciseModel>(new CreateExercise.Request(model.ExerciseType, model.Name, model.ImageRef), cancellationToken);
         }
 
         [HttpDelete]
-        public async Task Delete(long exerciseId, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        public async Task<IActionResult> Delete(long exerciseId, CancellationToken cancellationToken)
         {
-            await this.requestDispatcher.Dispatch(new DeleteExercise.Request(exerciseId), cancellationToken);
+            return await this.requestDispatcher.Dispatch(new DeleteExercise.Request(exerciseId), cancellationToken);
         }
     }
 }

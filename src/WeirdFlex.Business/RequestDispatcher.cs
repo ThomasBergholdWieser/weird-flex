@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
 using MediatR;
-using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WeirdFlex.Business.Interfaces;
@@ -22,27 +20,44 @@ namespace WeirdFlex.Business
             this.mapper = mapper;
         }
 
-        public async Task<TViewModel> Dispatch<TResponse, TViewModel>(IRequest<IResult<TResponse>> request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Dispatch<TResponse, TViewModel>(IRequest<IResult<TResponse>> request, CancellationToken cancellationToken = default)
         {
             var result = await this.mediator.Send(request, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return new BadRequestObjectResult(result);
+            }
 
             var value = this.mapper.Map<TViewModel>(result.Value);
 
-            return value;
+            return new OkObjectResult(value);
         }
 
-        public async Task<IEnumerable<TViewModel>> Dispatch<TResponse, TViewModel>(IRequest<IResult<IList<TResponse>>> request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Dispatch<TResponse, TViewModel>(IRequest<IResult<IList<TResponse>>> request, CancellationToken cancellationToken)
         {
             var result = await this.mediator.Send(request, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return new BadRequestObjectResult(result);
+            }
 
             var value = this.mapper.Map<IEnumerable<TViewModel>>(result.Value);
 
-            return value;
+            return new OkObjectResult(value);
         }
 
-        public async Task Dispatch(IRequest<IResult> request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Dispatch(IRequest<IResult> request, CancellationToken cancellationToken)
         {
             var result = await this.mediator.Send(request, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return new BadRequestObjectResult(result);
+            }
+
+            return new OkObjectResult(true);
         }
     }
 }

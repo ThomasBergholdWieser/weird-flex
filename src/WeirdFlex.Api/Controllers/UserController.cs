@@ -1,23 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using CSharpFunctionalExtensions;
-using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Tieto.Lama.Business.UseCases;
-using WeirdFlex.Business;
 using WeirdFlex.Business.Interfaces;
 using WeirdFlex.Business.Views.Responses;
-using WeirdFlex.Business.Views.ViewModels;
-using WeirdFlex.Data.Model;
 
 namespace WeirdFlex.Api.Controllers
 {
@@ -26,23 +19,12 @@ namespace WeirdFlex.Api.Controllers
     [Route("api/users")]
     public class UserController : ControllerBase
     {
-        private readonly ILogger logger;
-        private readonly IRequestDispatcher requestDispatcher;
-
-        public UserController(ILogger<UserController> logger, IRequestDispatcher requestDispatcher)
+        public UserController()
         {
-            this.logger = logger;
-            this.requestDispatcher = requestDispatcher;
-        }
-
-        [HttpPost]
-        public async Task<UserModel> Post(CreateUserModel model, CancellationToken cancellationToken)
-        {
-            return await this.requestDispatcher.Dispatch<User, UserModel>(new CreateUser.Request(model.DisplayName), cancellationToken);
         }
 
         [HttpGet("me")]
-        [Authorize(AuthenticationSchemes = OpenIdConnectDefaults.AuthenticationScheme)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserModel))]
         public IActionResult GetUser()
         {
             var fullName = User.GetDisplayName();

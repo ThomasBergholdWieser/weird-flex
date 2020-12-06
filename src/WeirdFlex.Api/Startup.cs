@@ -2,18 +2,17 @@ using System;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using WeirdFlex.Api.Behaviours;
 using WeirdFlex.Api.Extensions;
 using WeirdFlex.Api.Filter;
 using WeirdFlex.Business;
@@ -54,6 +53,7 @@ namespace WeirdFlex.Api
             services.AddSingleton<IServiceIdentity>(serviceIdentity);
 
             services.AddFlexAuthentication(serviceIdentity);
+            services.AddScoped<IUserContext, UserContext>();
 
             // Policies
             services.Configure<CookiePolicyOptions>(options =>
@@ -73,6 +73,7 @@ namespace WeirdFlex.Api
             // register infrastructure
             services.AddMediatR(typeof(WeirdFlexBusinessAssemblyMarker));
             services.AddAutoMapper(typeof(WeirdFlexBusinessAssemblyMarker));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
             // register business services
             services.AddScoped<IRequestDispatcher, RequestDispatcher>();

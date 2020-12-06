@@ -2,7 +2,6 @@
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using WeirdFlex.Common.Enums;
 using WeirdFlex.Data.EF;
 using WeirdFlex.Data.Model;
 
