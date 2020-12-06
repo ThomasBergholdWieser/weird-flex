@@ -48,8 +48,9 @@ namespace WeirdFlex.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var serviceIdentity = GetServiceIdentity(Configuration);
+            services.AddHttpContextAccessor();
 
+            var serviceIdentity = GetServiceIdentity(Configuration);
             services.AddSingleton<IServiceIdentity>(serviceIdentity);
 
             services.AddFlexAuthentication(serviceIdentity);
