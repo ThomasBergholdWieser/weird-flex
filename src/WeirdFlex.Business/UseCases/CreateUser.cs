@@ -2,7 +2,6 @@
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using WeirdFlex.Common.Enums;
 using WeirdFlex.Data.EF;
 using WeirdFlex.Data.Model;
 
@@ -14,9 +13,12 @@ namespace Tieto.Lama.Business.UseCases
         {
             public string Name { get; }
 
-            public Request(string name)
+            public string? Uid { get; }
+
+            public Request(string name, string? uid)
             {
                 this.Name = name;
+                this.Uid = uid;
             }
         }
 
@@ -29,7 +31,10 @@ namespace Tieto.Lama.Business.UseCases
 
         public async Task<IResult<User>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var newEntity = new User(request.Name);
+            var newEntity = new User(request.Name)
+            {
+                Uid = request.Uid,
+            };
 
             this.dbContext.Users
                 .Add(newEntity);

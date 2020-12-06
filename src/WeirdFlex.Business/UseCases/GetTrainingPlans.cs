@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WeirdFlex.Business.Interfaces;
 using WeirdFlex.Data.EF;
 using WeirdFlex.Data.Model;
 
@@ -14,25 +15,30 @@ namespace Tieto.Lama.Business.UseCases
     {
         public class Request : IRequest<IResult<IList<TrainingPlan>>>
         {
-            public long UserId { get; }
-
-            public Request(long userId)
+            public Request()
             {
-                UserId = userId;
             }
         }
 
         readonly FlexContext dbContext;
+        readonly IUserContext userContext;
 
-        public GetTrainingPlans(FlexContext dbContext)
+        public GetTrainingPlans(IUserContext userContext, FlexContext dbContext)
         {
             this.dbContext = dbContext;
+            this.userContext = userContext;
         }
 
         public async Task<IResult<IList<TrainingPlan>>> Handle(Request request, CancellationToken cancellationToken)
         {
+            var user = await userContext.EnsureUser(cancellationToken);
+            if (user == null)
+            {
+                return Result.Failure<IList<TrainingPlan>>("No user found");
+            }
+
             var list = await this.dbContext.TrainingPlans
-                .Where(x => x.UserId == request.UserId)
+                .Where(x => x.UserId == user.Id)
                 .ToListAsync(cancellationToken);
 
             return Result.Success(list);

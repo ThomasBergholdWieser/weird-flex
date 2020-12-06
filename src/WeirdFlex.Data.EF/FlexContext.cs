@@ -23,5 +23,16 @@ namespace WeirdFlex.Data.EF
         public DbSet<TrainingPlanInstance> TrainingPlanInstances => Set<TrainingPlanInstance>();
 
         public DbSet<User> Users => Set<User>();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.Uid)
+                .IsUnique(true);
+
+            base.OnModelCreating(modelBuilder);
+
+
+        }
     }
 }

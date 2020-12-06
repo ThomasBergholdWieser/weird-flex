@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WeirdFlex.Business.Interfaces;
 using WeirdFlex.Data.EF;
 using WeirdFlex.Data.Model;
 
@@ -13,36 +14,41 @@ namespace Tieto.Lama.Business.UseCases
     {
         public class Request : IRequest<IResult<TrainingPlan>>
         {
-            public long UserId { get; }
-
             public string Name { get; }
 
             public string? ImageRef { get; }
 
-            public Request(long userId, string name, string? imageRef)
+            public Request(string name, string? imageRef)
             {
-                this.UserId = userId;
                 this.Name = name;
                 this.ImageRef = imageRef;
             }
         }
 
         readonly FlexContext dbContext;
+        readonly IUserContext userContext;
 
-        public CreateTrainingPlan(FlexContext dbContext)
+        public CreateTrainingPlan(IUserContext userContext, FlexContext dbContext)
         {
             this.dbContext = dbContext;
+            this.userContext = userContext;
         }
 
         public async Task<IResult<TrainingPlan>> Handle(Request request, CancellationToken cancellationToken)
         {
+            var user = await userContext.EnsureUser(cancellationToken);
+            if (user == null)
+            {
+                return Result.Failure<TrainingPlan>("No user found");
+            }
+
             var maxOrder = (await this.dbContext.TrainingPlans
-                .Where(x => x.UserId == request.UserId)
-                .MaxAsync(x => (int?)x.Order)) ?? 0;
+                .Where(x => x.UserId == user.Id)
+                .MaxAsync(x => (int?)x.Order, cancellationToken)) ?? 0;
 
             maxOrder += 100;
 
-            var newEntity = new TrainingPlan(request.UserId, request.Name)
+            var newEntity = new TrainingPlan(user.Id, request.Name)
             {
                 ImageRef = request.ImageRef,
                 Order = maxOrder,

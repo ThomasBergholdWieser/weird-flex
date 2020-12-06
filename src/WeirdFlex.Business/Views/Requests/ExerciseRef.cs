@@ -1,6 +1,4 @@
-﻿using WeirdFlex.Common.Enums;
-
-namespace WeirdFlex.Business.Views.ViewModels
+﻿namespace WeirdFlex.Business.Views.ViewModels
 {
     public class ExerciseRef
     {
