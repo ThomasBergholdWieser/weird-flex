@@ -65,7 +65,7 @@ namespace WeirdFlex.Api.Controllers
         }
 
         [HttpGet]
-        [Route("login")]
+        [Route("me/login")]
         [AllowAnonymous]
         public async Task Login()
         {
@@ -77,7 +77,7 @@ namespace WeirdFlex.Api.Controllers
         }
 
         [HttpGet]
-        [Route("logout")]
+        [Route("me/logout")]
         public async Task Logout()
         {
             await AuthenticationHttpContextExtensions.SignOutAsync(HttpContext, CookieAuthenticationDefaults.AuthenticationScheme);

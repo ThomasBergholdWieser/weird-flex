@@ -22,7 +22,7 @@ namespace WeirdFlex.Api.Extensions
                     AuthorizationCode = new OpenApiOAuthFlow
                     {
                         AuthorizationUrl = serviceIdentity.IdentityProvider + "/oauth2/v2.0/authorize",
-                        TokenUrl = serviceIdentity.IdentityProvider + "/v2.0/token",
+                        TokenUrl = serviceIdentity.IdentityProvider + "/oauth2/v2.0/token",
                         Scopes = new Dictionary<string, string>
                         {
                             { "openid", "OpenID Connect" },
