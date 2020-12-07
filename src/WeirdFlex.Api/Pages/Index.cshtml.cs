@@ -16,6 +16,7 @@ namespace WeirdFlex.Api.Pages
 
         public async Task OnGetAsync()
         {
+            await Task.CompletedTask;
         }
     }
 }
