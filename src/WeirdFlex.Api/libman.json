@@ -10,6 +10,17 @@
         "dist/css/*",
         "dist/js/*"
       ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "chart.js@2.7.1",
+      "destination": "wwwroot/lib/chartjs",
+      "files": [
+        "dist/Chart.bundle.js",
+        "dist/Chart.bundle.min.js",
+        "dist/Chart.js",
+        "dist/Chart.min.js"
+      ]
     }
   ]
 }
