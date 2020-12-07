@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using WeirdFlex.Common.Model;
 
-namespace WeirdFlex.Business.Views
+namespace WeirdFlex.Api.Models
 {
     public class PaginatedList<T> : List<T>
     {

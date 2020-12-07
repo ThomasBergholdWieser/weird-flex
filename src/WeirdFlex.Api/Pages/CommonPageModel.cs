@@ -13,8 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WeirdFlex.Api;
+using WeirdFlex.Api.Models;
 using WeirdFlex.Business.Interfaces;
-using WeirdFlex.Business.Views;
 
 namespace Tieto.Lama.PrintApi.Pages
 {
