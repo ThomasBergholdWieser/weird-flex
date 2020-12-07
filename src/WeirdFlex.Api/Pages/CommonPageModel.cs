@@ -1,4 +1,5 @@
 using AutoMapper;
+using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -6,22 +7,24 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Namotion.Reflection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WeirdFlex.Api;
+using WeirdFlex.Business.Interfaces;
+using WeirdFlex.Business.Views;
 
 namespace Tieto.Lama.PrintApi.Pages
 {
     [Authorize(AuthenticationSchemes = OpenIdConnectDefaults.AuthenticationScheme, Policy = KnownPolicies.Flexer)]
-    public abstract class LamaPageModel : PageModel
+    public abstract class CommonPageModel : PageModel
     {
         protected readonly IMediator Mediator;
         protected readonly IMapper Mapper;
 
-        public const int DefaultPageSize = 10;
-
-        public LamaPageModel(IMediator mediator, IMapper mapper)
+        public CommonPageModel(IMediator mediator, IMapper mapper)
         {
             Mediator = mediator;
             Mapper = mapper;
@@ -47,15 +50,15 @@ namespace Tieto.Lama.PrintApi.Pages
             return pageSize;
         }
 
-        protected void UpdateWarningText(IUseCaseResult? useCaseResult = null, Exception? exception = null, string? text = null)
+        protected void UpdateWarningText(IResult? useCaseResult = null, Exception? exception = null, string? text = null)
         {
             if(useCaseResult != null)
             {
-                ViewData["WarningText"] = "An error occured: " + useCaseResult.ErrorMessage;
+                ViewData["WarningText"] = "An error occured: " + JsonConvert.SerializeObject(useCaseResult);
             }
             else if(exception != null)
             {
-                ViewData["WarningText"] = "An error occured: " + ExceptionFormatter.Format(exception);
+                ViewData["WarningText"] = "An error occured: " + exception.Message;
             }
             else
             {
@@ -87,7 +90,7 @@ namespace Tieto.Lama.PrintApi.Pages
         }
 
         protected async Task<TItem?> HandleGetRequest<TResponse, TItem>(IRequest<TResponse> request, Func<TResponse, TItem>? map = null)
-            where TResponse : class, IUseCaseResult
+            where TResponse : class, IResult
             where TItem : class
         {
             var result = default(TItem?);
@@ -108,7 +111,7 @@ namespace Tieto.Lama.PrintApi.Pages
 
         protected async Task<PaginatedList<TItem>?> HandlePaginatedGetRequest<TResponse, TItem>(IRequest<TResponse> request,
             Func<TResponse, IList<TItem>>? map = null)
-            where TResponse : class, IPaginatedResult, IUseCaseResult
+            where TResponse : class, IPaginatedResult, IResult
             where TItem : class
         {
             var result = default(PaginatedList<TItem>?);
@@ -128,7 +131,7 @@ namespace Tieto.Lama.PrintApi.Pages
         }
 
         protected async Task<bool> HandlePostRequest<TResponse>(IRequest<TResponse> request, bool validate = true)
-             where TResponse : class, IUseCaseResult
+             where TResponse : class, IResult
         {
             var response = default(TResponse?);
             if(!validate || ModelState.IsValid)

@@ -15,7 +15,7 @@ using WeirdFlex.Business.Views.Responses;
 namespace WeirdFlex.Api.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = KnownPolicies.Flexer)]
     [Route("api/users")]
     public class UserController : ControllerBase
     {

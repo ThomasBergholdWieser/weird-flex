@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -54,6 +55,14 @@ namespace WeirdFlex.Api.Extensions
             });
 
             //services.AddTransient<IPostConfigureOptions<OpenIdConnectOptions>, OpenIdConnectPostConfiguration>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(KnownPolicies.Flexer, new AuthorizationPolicyBuilder(OpenIdConnectDefaults.AuthenticationScheme)
+                    .RequireAssertion(context => context.User.HasClaim(x => x.Value == "Flexer"))
+                    .RequireAuthenticatedUser()
+                    .Build());
+            });
         }
     }
 
