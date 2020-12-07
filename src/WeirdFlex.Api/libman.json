@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "provider": "unpkg",
+      "library": "bootstrap@4.5.2",
+      "destination": "wwwroot/lib/bootstrap",
+      "files": [
+        "dist/css/*",
+        "dist/js/*"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "apexcharts@3.22.3",
+      "destination": "wwwroot/lib/apexcharts",
+      "files": [
+        "dist/*"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "fullcalendar@5.4.0",
+      "destination": "wwwroot/lib/fullcalendar",
+      "files": [
+        "main.*",
+        "locales-all.js",
+        "locales-all.min.js",
+      ]
+    }
+  ]
+}

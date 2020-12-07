@@ -1,0 +1,68 @@
+@model WeirdFlex.Common.Model.PageInfo
+@{
+}
+
+<form method="GET" id="paginationForm"></form>
+
+<div class="row">
+    <ul class="pagination mt-1">
+        <li class="page-item @(!Model.HasPreviousPage ? "disabled": "")">
+            <a class="page-link" asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-skip-start" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M4.5 3.5A.5.5 0 0 0 4 4v8a.5.5 0 0 0 1 0V4a.5.5 0 0 0-.5-.5z" />
+                    <path fill-rule="evenodd" d="M5.696 8L11.5 4.633v6.734L5.696 8zm-.792-.696a.802.802 0 0 0 0 1.392l6.363 3.692c.52.302 1.233-.043 1.233-.696V4.308c0-.653-.713-.998-1.233-.696L4.904 7.304z" />
+                </svg>
+            </a>
+        </li>
+        <li class="mr-1 page-item @(!Model.HasPreviousPage ? "disabled": "")">
+            @if (@Model.PageIndex > 2)
+            {
+                <a asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-pageSize="@Model.PageSize" class="page-link">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-skip-backward" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M.5 3.5A.5.5 0 0 1 1 4v3.248l6.267-3.636c.52-.302 1.233.043 1.233.696v2.94l6.267-3.636c.52-.302 1.233.043 1.233.696v7.384c0 .653-.713.998-1.233.696L8.5 8.752v2.94c0 .653-.713.998-1.233.696L1 8.752V12a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5zm7 1.133L1.696 8 7.5 11.367V4.633zm7.5 0L9.196 8 15 11.367V4.633z" />
+                    </svg>
+                </a>
+            }
+            else
+            {
+                <a asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-pageSize="@Model.PageSize" class="page-link">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-skip-backward" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M.5 3.5A.5.5 0 0 1 1 4v3.248l6.267-3.636c.52-.302 1.233.043 1.233.696v2.94l6.267-3.636c.52-.302 1.233.043 1.233.696v7.384c0 .653-.713.998-1.233.696L8.5 8.752v2.94c0 .653-.713.998-1.233.696L1 8.752V12a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5zm7 1.133L1.696 8 7.5 11.367V4.633zm7.5 0L9.196 8 15 11.367V4.633z" />
+                    </svg>
+                </a>
+            }
+        </li>
+        @{
+
+            foreach (int pageIndex in Model.PageSpan)
+            {
+                <li class="page-item @(pageIndex == Model.PageIndex ? "active disabled" : "")">
+                    <a asp-route-pageIndex="@pageIndex" asp-route-pageSize="@Model.PageSize" class="page-link">@pageIndex</a>
+                </li>
+            }
+        }
+        <li class="ml-1 page-item @(!Model.HasNextPage ? "disabled": "")">
+            <a asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-pageSize="@Model.PageSize" class="page-link">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-skip-forward" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M15.5 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V8.752l-6.267 3.636c-.52.302-1.233-.043-1.233-.696v-2.94l-6.267 3.636C.713 12.69 0 12.345 0 11.692V4.308c0-.653.713-.998 1.233-.696L7.5 7.248v-2.94c0-.653.713-.998 1.233-.696L15 7.248V4a.5.5 0 0 1 .5-.5zM1 4.633v6.734L6.804 8 1 4.633zm7.5 0v6.734L14.304 8 8.5 4.633z" />
+                </svg>
+            </a>
+        </li>
+        <li class="page-item @(!Model.HasNextPage ? "disabled": "")">
+            <a asp-route-pageIndex="@Model.TotalPageCount" asp-route-pageSize="@Model.PageSize" class="page-link">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-skip-end" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M12 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5z" />
+                    <path fill-rule="evenodd" d="M10.804 8L5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z" />
+                </svg>
+            </a>
+        </li>
+    </ul>
+
+    <div>
+        <select class="form-control mt-1 ml-2" onchange="$('#paginationForm').submit()"
+                name="pageSize"
+                asp-items="@(new SelectList(new Dictionary<string, int> { { "5", 5 }, { "10", 10 }, { "20", 20 }, { "50", 50 } }, "Key", "Value", Model.PageSize))"
+                form="paginationForm" >
+        </select>
+    </div>
+</div>

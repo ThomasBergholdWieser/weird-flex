@@ -117,6 +117,8 @@ namespace WeirdFlex.Api
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseOpenApi();

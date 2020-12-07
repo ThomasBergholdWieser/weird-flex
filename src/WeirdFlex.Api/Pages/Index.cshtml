@@ -1,0 +1,25 @@
+@page
+
+@model WeirdFlex.Api.Pages.IndexModel
+@{
+    ViewBag.Title = "Home";
+}
+
+<div id="calendar"></div>
+
+<canvas id="chart" width="400" height="400"></canvas>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth'
+        });
+        calendar.render();
+    });
+
+</script>
+
+@section Scripts {
+    <script src="~/lib/fullcalendar/main.js"></script>
+}

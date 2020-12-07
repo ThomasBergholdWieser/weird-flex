@@ -14,7 +14,7 @@ using WeirdFlex.Data.Model;
 namespace WeirdFlex.Api.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = KnownPolicies.Flexer)]
     [Route("api/exercises")]
     public class ExerciseController : ControllerBase
     {
