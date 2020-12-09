@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -49,13 +48,17 @@ namespace Tieto.Lama.PrintApi.Pages
             return pageSize;
         }
 
-        protected void UpdateWarningText(IResult? useCaseResult = null, Exception? exception = null, string? text = null)
+        protected void UpdateWarningText<TResult>(IResult<TResult>? useCaseResult = null)
         {
             if(useCaseResult != null)
             {
-                ViewData["WarningText"] = "An error occured: " + JsonConvert.SerializeObject(useCaseResult);
+                ViewData["WarningText"] = "An error occured: " + useCaseResult.Error;
             }
-            else if(exception != null)
+        }
+
+        protected void UpdateWarningText(Exception? exception = null, string? text = null)
+        {
+            if (exception != null)
             {
                 ViewData["WarningText"] = "An error occured: " + exception.Message;
             }
@@ -89,7 +92,7 @@ namespace Tieto.Lama.PrintApi.Pages
         }
 
         protected async Task<TItem?> HandleGetRequest<TResponse, TItem>(IRequest<TResponse> request, Func<TResponse, TItem>? map = null)
-            where TResponse : class, IResult
+            where TResponse : class, IResult<TItem>
             where TItem : class
         {
             var result = default(TItem?);
@@ -110,7 +113,7 @@ namespace Tieto.Lama.PrintApi.Pages
 
         protected async Task<PaginatedList<TItem>?> HandlePaginatedGetRequest<TResponse, TItem>(IRequest<TResponse> request,
             Func<TResponse, IList<TItem>>? map = null)
-            where TResponse : class, IPaginatedResult, IResult
+            where TResponse : class, IPaginatedResult, IResult<IList<TItem>>
             where TItem : class
         {
             var result = default(PaginatedList<TItem>?);
@@ -130,7 +133,7 @@ namespace Tieto.Lama.PrintApi.Pages
         }
 
         protected async Task<bool> HandlePostRequest<TResponse>(IRequest<TResponse> request, bool validate = true)
-             where TResponse : class, IResult
+             where TResponse : class, IResult<bool>
         {
             var response = default(TResponse?);
             if(!validate || ModelState.IsValid)

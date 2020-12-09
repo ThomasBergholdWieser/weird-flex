@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace WeirdFlex.Api.Behaviours
 {
@@ -30,32 +29,32 @@ namespace WeirdFlex.Api.Behaviours
 
             logger.LogInformation($"Handling request of type {{{MediatRRequestType}}}", typeName);
 
-            var serRequest = JsonConvert.SerializeObject(request);
+            var serRequest = request.ToString();
             if (!string.IsNullOrEmpty(serRequest?[1..^1]))
             {
                 logger.LogDebug($"Handling request of type {{{MediatRRequestType}}}, [{{{Source}}}] {{{Request}}}",
                     typeName,
                     Request,
-                    JsonConvert.SerializeObject(request));
+                    serRequest);
             }
 
             var response = await next();
 
-            var serResponse = JsonConvert.SerializeObject(response);
+            var serResponse = response?.ToString();
             if (response is IResult result &&
-                !result.IsSuccess)
+                result.IsFailure)
             {
                 logger.LogError($"Handling request of type {{{MediatRRequestType}}}, [{{{Source}}}], Result: {{Result}}",
                     typeName,
                     Response,
-                    JsonConvert.SerializeObject(response));
+                    serResponse);
             }
             else
             {
                 logger.LogDebug($"Handling request of type {{{MediatRRequestType}}}, [{{{Source}}}] {{{Response}}}",
                     typeName,
                     Response,
-                    JsonConvert.SerializeObject(response));
+                    serResponse);
             }
 
             return response;
