@@ -15,7 +15,7 @@ namespace WeirdFlex.Data.EF
         public FlexContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<FlexContext>()
-                .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=flexDb;Trusted_Connection=True;MultipleActiveResultSets=True")
+               .UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=flexDb;Trusted_Connection=True")
                 .EnableSensitiveDataLogging();
 
             return new FlexContext(optionsBuilder.Options);

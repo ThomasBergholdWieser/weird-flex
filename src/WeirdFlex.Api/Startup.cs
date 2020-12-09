@@ -89,7 +89,7 @@ namespace WeirdFlex.Api
             services.AddScoped<IRequestDispatcher, RequestDispatcher>();
 
             // register entity framework
-            services.AddDbContextFactory<FlexContext>(options => options
+            services.AddDbContext<FlexContext>(options => options
                 .UseSqlServer(Configuration.GetConnectionString(nameof(FlexContext))));
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IStartupFilter, DbMigrationsStartupFilter>());
 
