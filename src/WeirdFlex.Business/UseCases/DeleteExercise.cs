@@ -8,9 +8,9 @@ using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class DeleteExercise : IRequestHandler<DeleteExercise.Request, IResult>
+    public class DeleteExercise : IRequestHandler<DeleteExercise.Request, Result>
     {
-        public class Request : IRequest<IResult>
+        public class Request : IRequest<Result>
         {
             public long ExerciseId { get; }
 
@@ -27,7 +27,7 @@ namespace Tieto.Lama.Business.UseCases
             this.dbContext = dbContext;
         }
 
-        public async Task<IResult> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
         {
             var unattached = new Exercise(ExerciseType.Duration, "unimportant") { Id = request.ExerciseId };
             var attached = this.dbContext.Exercises

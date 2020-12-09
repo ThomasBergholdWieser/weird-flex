@@ -11,9 +11,9 @@ using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class GetTrainingPlans : IRequestHandler<GetTrainingPlans.Request, IResult<IList<TrainingPlan>>>
+    public class GetTrainingPlans : IRequestHandler<GetTrainingPlans.Request, Result<IList<TrainingPlan>>>
     {
-        public class Request : IRequest<IResult<IList<TrainingPlan>>>
+        public class Request : IRequest<Result<IList<TrainingPlan>>>
         {
             public Request()
             {
@@ -29,7 +29,7 @@ namespace Tieto.Lama.Business.UseCases
             this.userContext = userContext;
         }
 
-        public async Task<IResult<IList<TrainingPlan>>> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<Result<IList<TrainingPlan>>> Handle(Request request, CancellationToken cancellationToken)
         {
             var user = await userContext.EnsureUser(cancellationToken);
             if (user == null)
@@ -37,7 +37,7 @@ namespace Tieto.Lama.Business.UseCases
                 return Result.Failure<IList<TrainingPlan>>("No user found");
             }
 
-            var list = await this.dbContext.TrainingPlans
+            IList<TrainingPlan> list = await this.dbContext.TrainingPlans
                 .Where(x => x.UserId == user.Id)
                 .ToListAsync(cancellationToken);
 

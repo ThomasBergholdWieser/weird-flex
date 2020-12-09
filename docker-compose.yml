@@ -6,20 +6,3 @@ services:
     build:
       context: .
       dockerfile: src/WeirdFlex.Api/Dockerfile
-    environment:
-    - ConnectionStrings__FlexContext=Server=mariadb;Database=flexDb;User=root;Password=f2S-HtaPD_Lx;      
-    depends_on:
-    - weirdflex_mariadb
-
-  weirdflex_mariadb:
-    image: mariadb:10.5
-    container_name: mariadb
-    ports:
-    - 3306:3306
-    environment:
-    - MYSQL_ROOT_PASSWORD=f2S-HtaPD_Lx
-    volumes:
-    - volumemariadb:/var/lib/mysql      
-    
-volumes:
-  volumemariadb: {}

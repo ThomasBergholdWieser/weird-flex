@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WeirdFlex.Data.EF.Migrations;
 using WeirdFlex.Data.Model;
 
 namespace WeirdFlex.Data.EF
@@ -32,7 +33,12 @@ namespace WeirdFlex.Data.EF
 
             base.OnModelCreating(modelBuilder);
 
+            Seed(modelBuilder);
+        }
 
+        private static void Seed(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Exercise>().Seed();
         }
     }
 }

@@ -10,9 +10,9 @@ using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class AddExerciseToTrainingPlan : IRequestHandler<AddExerciseToTrainingPlan.Request, IResult>
+    public class AddExerciseToTrainingPlan : IRequestHandler<AddExerciseToTrainingPlan.Request, Result>
     {
-        public class Request : IRequest<IResult>
+        public class Request : IRequest<Result>
         {
             public long TrainingPlanId { get; }
             public long ExerciseId { get; }
@@ -33,7 +33,7 @@ namespace Tieto.Lama.Business.UseCases
             this.userContext = userContext;
         }
 
-        public async Task<IResult> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(Request request, CancellationToken cancellationToken)
         {
             var user = await userContext.EnsureUser(cancellationToken);
             if (user == null)
