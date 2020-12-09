@@ -162,7 +162,7 @@ namespace WeirdFlex.Data.EF.Migrations
             migrationBuilder.InsertData(
                 table: "Exercises",
                 columns: new[] { "Id", "Equipment", "ExerciseType", "ImageRef", "Name" },
-                values: new object[,]
+                values: new object?[,]
                 {
                     { 1L, null, 3, null, "Running" },
                     { 29L, "Dumbbell", 1, null, "Hammer Curl" },
