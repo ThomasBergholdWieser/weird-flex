@@ -11,6 +11,8 @@ namespace WeirdFlex.Data.Model
 
         public string Name { get; set; }
 
+        public string? Equipment { get; set; }
+
         public string? ImageRef { get; set; }
 
         public Exercise(ExerciseType exerciseType, string Name)

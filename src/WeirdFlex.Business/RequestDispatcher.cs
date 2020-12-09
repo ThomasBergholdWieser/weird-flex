@@ -20,13 +20,13 @@ namespace WeirdFlex.Business
             this.mapper = mapper;
         }
 
-        public async Task<IActionResult> Dispatch<TResponse, TViewModel>(IRequest<IResult<TResponse>> request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Dispatch<TResponse, TViewModel>(IRequest<Result<TResponse>> request, CancellationToken cancellationToken = default)
         {
             var result = await this.mediator.Send(request, cancellationToken);
 
             if (result.IsFailure)
             {
-                return new BadRequestObjectResult(result);
+                return new BadRequestObjectResult(result.Error);
             }
 
             var value = this.mapper.Map<TViewModel>(result.Value);
@@ -34,13 +34,13 @@ namespace WeirdFlex.Business
             return new OkObjectResult(value);
         }
 
-        public async Task<IActionResult> Dispatch<TResponse, TViewModel>(IRequest<IResult<IList<TResponse>>> request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Dispatch<TResponse, TViewModel>(IRequest<Result<IList<TResponse>>> request, CancellationToken cancellationToken)
         {
             var result = await this.mediator.Send(request, cancellationToken);
 
             if (result.IsFailure)
             {
-                return new BadRequestObjectResult(result);
+                return new BadRequestObjectResult(result.Error);
             }
 
             var value = this.mapper.Map<IEnumerable<TViewModel>>(result.Value);
@@ -48,13 +48,13 @@ namespace WeirdFlex.Business
             return new OkObjectResult(value);
         }
 
-        public async Task<IActionResult> Dispatch(IRequest<IResult> request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Dispatch(IRequest<Result> request, CancellationToken cancellationToken)
         {
             var result = await this.mediator.Send(request, cancellationToken);
 
             if (result.IsFailure)
             {
-                return new BadRequestObjectResult(result);
+                return new BadRequestObjectResult(result.Error);
             }
 
             return new OkObjectResult(true);

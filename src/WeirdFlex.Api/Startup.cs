@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
@@ -11,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using WeirdFlex.Api.Behaviours;
 using WeirdFlex.Api.Extensions;
 using WeirdFlex.Api.Filter;
@@ -64,11 +62,22 @@ namespace WeirdFlex.Api
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Cors
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                    {
+                        builder.WithOrigins(
+                            "https://localhost:7501")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });
+            });
 
             services.AddMemoryCache();
             services.AddRouting();
             services.AddControllers()
-                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())); 
+                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddRazorPages();
 
             // register infrastructure
@@ -81,11 +90,7 @@ namespace WeirdFlex.Api
 
             // register entity framework
             services.AddDbContext<FlexContext>(options => options
-                // replace with your connection string
-                .UseMySql(Configuration[$"ConnectionStrings:{nameof(FlexContext)}"], mySqlOptions =>
-                {
-                    mySqlOptions.ServerVersion(new Version(8, 0, 18), ServerType.MariaDb);
-                }));
+                .UseSqlServer(Configuration.GetConnectionString(nameof(FlexContext))));
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IStartupFilter, DbMigrationsStartupFilter>());
 
             services.AddSwaggerGen(c =>
@@ -115,11 +120,11 @@ namespace WeirdFlex.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseOpenApi();
             app.UseSwaggerUi3(c =>
@@ -127,6 +132,8 @@ namespace WeirdFlex.Api
                 c.EnableTryItOut = true;
                 c.AddFlexAuthentication(GetServiceIdentity(Configuration));
             });
+
+            app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();

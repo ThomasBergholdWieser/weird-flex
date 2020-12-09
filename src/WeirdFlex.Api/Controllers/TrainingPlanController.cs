@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Tieto.Lama.Business.UseCases;
 using WeirdFlex.Business.Interfaces;
 using WeirdFlex.Business.Views.Responses;

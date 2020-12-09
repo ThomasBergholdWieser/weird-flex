@@ -7,19 +7,16 @@ services:
       context: .
       dockerfile: src/WeirdFlex.Api/Dockerfile
     environment:
-    - ConnectionStrings__FlexContext=Server=mariadb;Database=flexDb;User=root;Password=f2S-HtaPD_Lx;      
+    - ConnectionStrings__FlexContext=Server=weirdflex-sqlserver;Database=flexDb;User=sa;Password=Your_password123;      
     depends_on:
-    - weirdflex_mariadb
+    - weirdflex_sqlserver
 
-  weirdflex_mariadb:
-    image: mariadb:10.5
-    container_name: mariadb
+  weirdflex_sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: weirdflex-sqlserver
     ports:
-    - 3306:3306
+    - 1433:1433
     environment:
-    - MYSQL_ROOT_PASSWORD=f2S-HtaPD_Lx
-    volumes:
-    - volumemariadb:/var/lib/mysql      
-    
-volumes:
-  volumemariadb: {}
+    - SA_PASSWORD=Your_password123
+    - ACCEPT_EULA=Y
+    - MSSQL_PID=Express

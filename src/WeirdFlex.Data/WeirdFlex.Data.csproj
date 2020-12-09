@@ -5,12 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpFunctionalExtensions" Version="2.12.2" />
+    <Compile Remove="Extensions\**" />
+    <Compile Remove="Unbound\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <EmbeddedResource Remove="Unbound\**" />
+    <None Remove="Extensions\**" />
+    <None Remove="Unbound\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
-    <Folder Include="Unbound\" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.13.2" />
   </ItemGroup>
 
   <ItemGroup>

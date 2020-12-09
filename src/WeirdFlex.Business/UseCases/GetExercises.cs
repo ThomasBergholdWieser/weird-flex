@@ -9,9 +9,9 @@ using WeirdFlex.Data.Model;
 
 namespace Tieto.Lama.Business.UseCases
 {
-    public class GetExercises : IRequestHandler<GetExercises.Request, IResult<IList<Exercise>>>
+    public class GetExercises : IRequestHandler<GetExercises.Request, Result<IList<Exercise>>>
     {
-        public class Request : IRequest<IResult<IList<Exercise>>>
+        public class Request : IRequest<Result<IList<Exercise>>>
         {
             public Request()
             {
@@ -25,9 +25,9 @@ namespace Tieto.Lama.Business.UseCases
             this.dbContext = dbContext;
         }
 
-        public async Task<IResult<IList<Exercise>>> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<Result<IList<Exercise>>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var list = await this.dbContext.Exercises
+            IList<Exercise> list = await this.dbContext.Exercises
                 .ToListAsync(cancellationToken);
 
             return Result.Success(list);
