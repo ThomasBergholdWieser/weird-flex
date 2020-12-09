@@ -68,7 +68,7 @@ namespace WeirdFlex.Api
                 options.AddDefaultPolicy(builder =>
                     {
                         builder.WithOrigins(
-                            "http://localhost:7501")
+                            "https://localhost:7501")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                     });
@@ -120,8 +120,6 @@ namespace WeirdFlex.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -134,6 +132,8 @@ namespace WeirdFlex.Api
                 c.EnableTryItOut = true;
                 c.AddFlexAuthentication(GetServiceIdentity(Configuration));
             });
+
+            app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
